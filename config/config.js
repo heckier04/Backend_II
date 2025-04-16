@@ -5,16 +5,14 @@ dotenv.config();
 
 const userName = process.env.USER_MONGODB || 'default_user'; // Usuario de MongoDB
 const password = process.env.PASSWORD || 'default_password'; // Contraseña de MongoDB
-const dbName = process.env.DB_NAME || 'default_db'; // Nombre de la base de datos
-const cluster = process.env.CLUSTER || 'default_cluster'; // Nombre del cluster de MongoDB
 
 export const config = {
   PORT: process.env.PORT || 8081, // Puerto del servidor
   db: {
-    connectionString: `mongodb+srv://${userName}:${password}@${cluster}.mongodb.net/${dbName}?retryWrites=true&w=majority`
+    connectionString: `mongodb+srv://${userName}:${password}@callcoder.1tibfdt.mongodb.net/` // Cadena de conexión para MongoDB Atlas
   }
 };
 
 // Mostrar información de configuración (opcional, solo para depuración)
-console.log(config.db.connectionString); // Muestra la cadena de conexión a MongoDB
-console.log(`Servidor corriendo en el puerto ${config.PORT}`);
+console.log(`Conexión a MongoDB: ${config.db.connectionString}`);
+console.log(`Servidor corriendo en el puerto: ${config.PORT}`);

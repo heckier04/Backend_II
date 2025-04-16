@@ -4,11 +4,11 @@ FROM node:22-alpine
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el archivo package.json y package-lock.json al contenedor
+# Copia solo los archivos necesarios para instalar las dependencias
 COPY package*.json ./
 
-# Instala las dependencias
-RUN npm install
+# Instala las dependencias de producción
+RUN npm install 
 
 # Copia el resto de los archivos del proyecto al contenedor
 COPY . .

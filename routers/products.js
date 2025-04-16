@@ -1,41 +1,53 @@
 import express from 'express';
+import Product from '../models/Product.js';
+import authorizeRole from '../middlewares/authorizeRole.js';
 
 const router = express.Router();
 
-// Rutas de ejemplo para productos
-
-// Obtener todos los productos
-router.get('/', (req, res) => {
-    res.json({ message: 'Obteniendo todos los productos' });
+// Obtener todos los productos (con paginación y filtros)
+router.get('/', async (req, res) => {
+  const { page = 1, limit = 10, search = '' } = req.query;
+  try {
+    const products = await Product.find({ name: new RegExp(search, 'i') })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
+    res.status(200).json(products);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// Crear un nuevo producto
-router.post('/', (req, res) => {
-    const { name, price, description } = req.body;
-    // Aquí iría la lógica para crear un producto
-    res.json({ message: 'Producto creado', product: { name, price, description } });
+// Crear un nuevo producto (solo admin)
+router.post('/', authorizeRole(['admin']), async (req, res) => {
+  const { name, price, description } = req.body;
+  try {
+    const newProduct = new Product({ name, price, description });
+    await newProduct.save();
+    res.status(201).json(newProduct);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// Obtener un producto por ID
-router.get('/:id', (req, res) => {
-    const { id } = req.params;
-    // Aquí iría la lógica para obtener un producto por su ID
-    res.json({ message: `Obteniendo producto con ID: ${id}` });
+// Actualizar un producto (solo admin)
+router.put('/:id', authorizeRole(['admin']), async (req, res) => {
+  try {
+    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.status(200).json(updatedProduct);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
-// Actualizar un producto por ID
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const { name, price, description } = req.body;
-    // Aquí iría la lógica para actualizar un producto
-    res.json({ message: `Producto con ID: ${id} actualizado`, product: { name, price, description } });
-});
-
-// Eliminar un producto por ID
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    // Aquí iría la lógica para eliminar un producto
-    res.json({ message: `Producto con ID: ${id} eliminado` });
+// Eliminar un producto (solo admin)
+router.delete('/:id', authorizeRole(['admin']), async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.status(200).json({ message: 'Producto eliminado' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 export default router;

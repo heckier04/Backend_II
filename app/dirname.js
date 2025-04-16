@@ -1,3 +1,10 @@
-import { __dirname } from './dirname.js';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-console.log(__dirname); // Muestra el directorio actual
+// Obtener el nombre del archivo actual
+const __filename = fileURLToPath(import.meta.url);
+
+// Obtener el directorio actual
+const __dirname = dirname(__filename);
+
+export { __dirname };
