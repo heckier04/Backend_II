@@ -5,22 +5,23 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - 8081:8081 # Usa la variable de entorno PORT para el puerto
+      - 8081:8081
     environment:
-      - MONGO_URI=mongodb://${userName}:${password}@callcoder.1tibfdt.mongodb.net/?retryWrites=true&w=majority # Usa las variables de entorno del archivo .env
+      - MONGO_URI=mongodb+srv://${USER_MONGODB}:${PASSWORD}@callcoder.1tibfdt.mongodb.net/backend_II?retryWrites=true&w=majority
+      - JWT_SECRET=${JWT_SECRET}
     depends_on:
       - mongo
     volumes:
-      - .:/app # Sincroniza los archivos locales con el contenedor
-      - /app/node_modules # Evita conflictos con node_modules
+      - .:/app
+      - /app/node_modules
 
   mongo:
     image: mongo:6.0
-    container_name: callcoder # Nombre del contenedor de MongoDB
+    container_name: callcoder
     ports:
-      - "27017:27017" # Puerto predeterminado de MongoDB
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db # Persistencia de datos
+      - mongo-data:/data/db
 
 volumes:
   mongo-data:

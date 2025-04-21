@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
+import { userSchema } from '../schema/user.schema.js';
 
-const userSchema = new mongoose.Schema({
-  first_name: String,
-  last_name: String,
-  email: { type: String, required: true, unique: true },
-  age: Number,
-  password: String,
-  cart: { type: mongoose.Schema.Types.ObjectId, ref: 'Cart' },
-  role: { type: String, default: 'user' }
-});
+const userCollection = 'users';
 
-export const UserModel = mongoose.model('User', userSchema);
+// Agregar índices para mejorar el rendimiento en consultas frecuentes
+userSchema.index({ email: 1 }, { unique: true }); // Índice único para el email
+
+const UserModel = mongoose.model(userCollection, userSchema);
+
+export default UserModel;
+

@@ -7,4 +7,4 @@ const __filename = fileURLToPath(import.meta.url);
 // Obtener el directorio actual
 const __dirname = dirname(__filename);
 
-export { __dirname };
+export { __dirname, __filename };
