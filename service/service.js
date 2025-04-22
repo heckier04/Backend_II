@@ -1,8 +1,9 @@
-import CartManager from '../persistencia/dao/cart.dao.js';
-import ProductManager from '../persistencia/dao/product.dao.js';
+import { CartDAO } from '../persistencia/dao/cart.dao.js';
+import { ProductDAO } from '../persistencia/dao/product.dao.js';
 
-const cartManager = new CartManager();
-const productManager = new ProductManager();
+// Instancias de los DAOs
+const cartDAO = new CartDAO();
+const productDAO = new ProductDAO();
 
 // Clase de error personalizada
 class NotFoundError extends Error {
@@ -15,7 +16,11 @@ class NotFoundError extends Error {
 
 // Servicio para obtener un carrito por ID
 export const getCartService = async (cartId) => {
-  const cart = await cartManager.getCartById(cartId);
+  if (!cartId) {
+    throw new Error('El ID del carrito es requerido');
+  }
+
+  const cart = await cartDAO.getCartById(cartId);
   if (!cart) {
     throw new NotFoundError('Carrito no encontrado');
   }
@@ -24,19 +29,23 @@ export const getCartService = async (cartId) => {
 
 // Servicio para agregar un producto al carrito
 export const addProductToCartService = async (cartId, productId, quantity = 1) => {
+  if (!cartId || !productId) {
+    throw new Error('El ID del carrito y el ID del producto son requeridos');
+  }
+
   if (quantity <= 0) {
     throw new Error('La cantidad debe ser un número positivo');
   }
 
-  const cart = await cartManager.getCartById(cartId);
+  const cart = await cartDAO.getCartById(cartId);
   if (!cart) {
     throw new NotFoundError('Carrito no encontrado');
   }
 
-  const product = await productManager.getProductById(productId);
+  const product = await productDAO.getProductById(productId);
   if (!product) {
     throw new NotFoundError('Producto no encontrado');
   }
 
-  return await cartManager.addProductToCart(cartId, productId, quantity);
+  return await cartDAO.addProductToCart(cartId, productId, quantity);
 };

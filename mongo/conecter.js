@@ -3,11 +3,13 @@ import { config } from "../config/config.js";
 
 export const connectDB = async () => {
   try {
-    await mongoose.connect(config.db.connectionString);
+    await mongoose.connect(config.db.connectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
     console.log("✅ Conexión a MongoDB exitosa");
   } catch (error) {
     console.error("❌ Error al conectar a MongoDB:", error.message);
-    console.error(error.stack); // Agregar el stack del error para depuración
     process.exit(1); // Finaliza el proceso si no se puede conectar
   }
 };

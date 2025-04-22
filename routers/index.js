@@ -12,12 +12,12 @@ router.use((req, __, next) => {
 });
 
 // Rutas principales
-router.use('/users', userRouter); // Rutas relacionadas con usuarios
-router.use('/products', productRouter); // Rutas relacionadas con productos
-router.use('/carts', cartRouter); // Rutas relacionadas con carritos
+router.use('/users', userRouter);
+router.use('/products', productRouter);
+router.use('/carts', cartRouter);
 
 // Manejo de rutas no encontradas
-router.use('*', (req, res) => {
+router.use('*', (__, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
 

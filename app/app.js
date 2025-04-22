@@ -12,12 +12,6 @@ import { config } from '../config/config.js';
 // Cargar variables de entorno
 dotenv.config();
 
-// Verificar variables de entorno críticas
-if (!process.env.JWT_SECRET || !process.env.MONGO_URI) {
-  console.error('❌ Error: Faltan variables de entorno críticas (JWT_SECRET, MONGO_URI)');
-  process.exit(1);
-}
-
 // Conectar a MongoDB
 connectDB();
 

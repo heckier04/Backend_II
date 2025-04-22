@@ -1,6 +1,8 @@
+import mongoose from 'mongoose';
 import CartModel from '../models/cart.models.js';
 
 export class CartDAO {
+  // Crear un nuevo carrito
   async createCart() {
     try {
       const cart = new CartModel({ products: [] });
@@ -10,7 +12,12 @@ export class CartDAO {
     }
   }
 
+  // Obtener un carrito por ID
   async getCartById(cartId) {
+    if (!mongoose.Types.ObjectId.isValid(cartId)) {
+      throw new Error('El ID del carrito no es válido');
+    }
+
     try {
       return await CartModel.findById(cartId).populate('products.product');
     } catch (error) {
@@ -18,7 +25,16 @@ export class CartDAO {
     }
   }
 
+  // Agregar un producto al carrito
   async addProductToCart(cartId, productId, quantity) {
+    if (!mongoose.Types.ObjectId.isValid(cartId)) {
+      throw new Error('El ID del carrito no es válido');
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      throw new Error('El ID del producto no es válido');
+    }
+
     try {
       const cart = await CartModel.findById(cartId);
       if (!cart) throw new Error('Carrito no encontrado');
@@ -36,7 +52,16 @@ export class CartDAO {
     }
   }
 
+  // Eliminar un producto del carrito
   async removeProductFromCart(cartId, productId) {
+    if (!mongoose.Types.ObjectId.isValid(cartId)) {
+      throw new Error('El ID del carrito no es válido');
+    }
+
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      throw new Error('El ID del producto no es válido');
+    }
+
     try {
       const cart = await CartModel.findById(cartId);
       if (!cart) throw new Error('Carrito no encontrado');
