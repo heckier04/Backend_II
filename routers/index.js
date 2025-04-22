@@ -16,9 +16,4 @@ router.use('/users', userRouter);
 router.use('/products', productRouter);
 router.use('/carts', cartRouter);
 
-// Manejo de rutas no encontradas
-router.use('*', (__, res) => {
-  res.status(404).json({ error: 'Ruta no encontrada' });
-});
-
 export default router;

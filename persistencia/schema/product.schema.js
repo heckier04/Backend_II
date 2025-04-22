@@ -26,3 +26,8 @@ export const productSchema = new mongoose.Schema(
     versionKey: false,
   }
 );
+
+// Puedes agregar un índice único para la propiedad 'code', si es necesario.
+// productSchema.index({ code: 1 }, { unique: true });
+
+export default mongoose.model('Product', productSchema);

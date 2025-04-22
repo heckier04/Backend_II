@@ -6,12 +6,12 @@ export const userSchema = new mongoose.Schema(
     first_name: { type: String, required: true },
     last_name: { type: String, required: true },
     email: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true,
-        lowercase: true,
-        validate: {
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      lowercase: true,
+      validate: {
         validator: function (v) {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); // Validación para formato de email
         },
@@ -40,3 +40,5 @@ userSchema.pre('save', function (next) {
 userSchema.methods.isValidPassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
+
+export default mongoose.model('User', userSchema);

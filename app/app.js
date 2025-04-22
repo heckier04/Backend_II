@@ -34,9 +34,11 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/api', mainRouter);
 
 // Manejo de rutas no encontradas
-app.use('*', (_, res) => {
+
+app.use(/.*/, (__, res) => {
   res.status(404).json({ error: 'Ruta no encontrada' });
 });
+
 
 // Manejo de errores global
 app.use((err, _, res, __) => {
@@ -50,5 +52,5 @@ app.use((err, _, res, __) => {
 // Iniciar el servidor
 const PORT = config.PORT;
 app.listen(PORT, () => {
-  console.log(`✅ Servidor corriendo en el puerto ${PORT} en modo ${process.env.NODE_ENV || 'desarrollo'}`);
+  console.log(`✅ Servidor corriendo en http://localhost:${PORT} }`);
 });
