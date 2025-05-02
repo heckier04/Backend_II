@@ -3,7 +3,7 @@ import passport from 'passport';
 import { UserDAO } from '../persistencia/dao/user.dao.js';
 import jwt from 'jsonwebtoken';
 import { validationResult } from 'express-validator';
-
+import { UserDTO } from '../dtos/users.dto.js';
 const router = Router();
 const userDAO = new UserDAO();
 
@@ -59,15 +59,23 @@ export const loginUser = async (req, res) => {
 };
 
 // Obtener el usuario actual
-export const getCurrentUser = async (req, res) => {
+export const getCurrentUser = (req, res) => {
   try {
-    const user = await userDAO.getUserById(req.user.id);
-    if (!user) {
-      return res.status(404).json({ error: 'Usuario no encontrado' });
-    }
-    res.status(200).json(user);
+    // Crea un DTO con solo los campos seguros
+    const safeUser = UserDTO.toDTO
+      ? UserDTO.toDTO(req.user)             // si usaste el método toDTO
+      : new UserDTO(req.user);              // si no agregaste toDTO
+
+    return res.json({
+      status: 'success',
+      user: safeUser
+    });
   } catch (error) {
-    res.status(500).json({ error: `Error al obtener el usuario actual: ${error.message}` });
+    console.error('Error en getCurrentUser:', error);
+    return res.status(500).json({
+      status: 'error',
+      message: 'No se pudo procesar el usuario actual'
+    });
   }
 };
 

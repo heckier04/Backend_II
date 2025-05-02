@@ -1,13 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { connectDB } from '../mongo/conecter.js';
+import { connectDB } from './mongo/conecter.js';
 import { __dirname } from './dirname.js';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import mainRouter from '../routers/index.js';
-import passport from '../middlewares/passport.js';
-import { config } from '../config/config.js';
+import mainRouter from './routers/index.js';
+import passport from './middlewares/passport.js';
+import { config } from './config/config.js';
 
 // Cargar variables de entorno
 dotenv.config();

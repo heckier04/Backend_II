@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8081
 
 # Comando para ejecutar la aplicación
-CMD ["node", "app/app.js"]
+CMD ["node", "app.js"]

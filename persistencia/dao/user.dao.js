@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import UserModel from '../models/user.models.js';
 
 export class UserDAO {
@@ -6,7 +7,7 @@ export class UserDAO {
       const user = new UserModel(userData);
       return await user.save();
     } catch (error) {
-      throw new Error(`Error al crear el usuario: ${error.message}`);
+      throw new Error(`Error al crear usuario: ${error.message}`);
     }
   }
 
@@ -14,15 +15,29 @@ export class UserDAO {
     try {
       return await UserModel.findOne({ email });
     } catch (error) {
-      throw new Error(`Error al obtener el usuario con email ${email}: ${error.message}`);
+      throw new Error(`Error al obtener usuario por email: ${error.message}`);
     }
   }
 
   async getUserById(userId) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error('ID de usuario inválido');
+    }
     try {
       return await UserModel.findById(userId).populate('cart');
     } catch (error) {
-      throw new Error(`Error al obtener el usuario con ID ${userId}: ${error.message}`);
+      throw new Error(`Error al obtener usuario por ID: ${error.message}`);
+    }
+  }
+
+  async updateUser(userId, updateData) {
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      throw new Error('ID de usuario inválido');
+    }
+    try {
+      return await UserModel.findByIdAndUpdate(userId, updateData, { new: true });
+    } catch (error) {
+      throw new Error(`Error al actualizar usuario: ${error.message}`);
     }
   }
 }
