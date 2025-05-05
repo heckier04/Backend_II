@@ -1,5 +1,5 @@
 import TicketModel from '../models/ticket.model.js';
-class TicketMongoDAO {
+export class TicketDAO {
     async createTicket(data) {
         return await TicketModel.create(data);
     }
@@ -12,5 +12,3 @@ class TicketMongoDAO {
         return await TicketModel.find();
     }
 }
-
-export default TicketMongoDAO;

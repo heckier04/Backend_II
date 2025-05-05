@@ -45,24 +45,18 @@ export class ProductDAO {
   }
 
   async updateProduct(productId, updateData) {
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      throw new Error('ID de producto inválido');
-    }
     try {
       return await ProductModel.findByIdAndUpdate(productId, updateData, { new: true });
-    } catch (error) {
-      throw new Error(`Error al actualizar producto: ${error.message}`);
+    } catch {
+      throw new Error('Error al actualizar producto');
     }
   }
 
   async deleteProduct(productId) {
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      throw new Error('ID de producto inválido');
-    }
     try {
       return await ProductModel.findByIdAndDelete(productId);
-    } catch (error) {
-      throw new Error(`Error al eliminar producto: ${error.message}`);
+    } catch {
+      throw new Error('Error al eliminar producto');
     }
   }
 }

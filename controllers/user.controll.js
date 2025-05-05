@@ -10,16 +10,10 @@ const userDAO = new UserDAO();
 // Registrar un nuevo usuario
 export const registerUser = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
     const { email, password, ...rest } = req.body;
 
     // Verificar si el usuario ya existe
-    const existingUser = await userDAO.getUserByEmail(email);
-    if (existingUser) {
+    if (await userDAO.getUserByEmail(email)) {
       return res.status(400).json({ error: 'El email ya está registrado' });
     }
 
@@ -27,21 +21,16 @@ export const registerUser = async (req, res) => {
     const newUser = await userDAO.createUser({ email, password, ...rest });
     res.status(201).json(newUser);
   } catch (error) {
-    res.status(500).json({ error: `Error al registrar el usuario: ${error.message}` });
+    res.status(500).json({ error: 'Error al registrar el usuario' });
   }
 };
 
 // Iniciar sesión
 export const loginUser = async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
     const { email, password } = req.body;
 
-    // Verificar si el usuario existe
+    // Verificar si el usuario existe y la contraseña es válida
     const user = await userDAO.getUserByEmail(email);
     if (!user || !user.isValidPassword(password)) {
       return res.status(401).json({ error: 'Credenciales inválidas' });
@@ -54,28 +43,17 @@ export const loginUser = async (req, res) => {
 
     res.status(200).json({ message: 'Inicio de sesión exitoso', token });
   } catch (error) {
-    res.status(500).json({ error: `Error al iniciar sesión: ${error.message}` });
+    res.status(500).json({ error: 'Error al iniciar sesión' });
   }
 };
 
 // Obtener el usuario actual
 export const getCurrentUser = (req, res) => {
   try {
-    // Crea un DTO con solo los campos seguros
-    const safeUser = UserDTO.toDTO
-      ? UserDTO.toDTO(req.user)             // si usaste el método toDTO
-      : new UserDTO(req.user);              // si no agregaste toDTO
-
-    return res.json({
-      status: 'success',
-      user: safeUser
-    });
-  } catch (error) {
-    console.error('Error en getCurrentUser:', error);
-    return res.status(500).json({
-      status: 'error',
-      message: 'No se pudo procesar el usuario actual'
-    });
+    const safeUser = new UserDTO(req.user);
+    res.json({ status: 'success', user: safeUser });
+  } catch {
+    res.status(500).json({ status: 'error', message: 'No se pudo procesar el usuario actual' });
   }
 };
 

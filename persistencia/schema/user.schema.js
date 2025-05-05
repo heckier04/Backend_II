@@ -12,9 +12,7 @@ export const userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       validate: {
-        validator: function (v) {
-          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); // Validación para formato de email
-        },
+        validator: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
         message: 'El email no es válido',
       },
     },
@@ -31,8 +29,9 @@ export const userSchema = new mongoose.Schema(
 
 // Middleware para encriptar la contraseña antes de guardar
 userSchema.pre('save', function (next) {
-  if (!this.isModified('password')) return next();
-  this.password = bcrypt.hashSync(this.password, 10);
+  if (this.isModified('password')) {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
   next();
 });
 

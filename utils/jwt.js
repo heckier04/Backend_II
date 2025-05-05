@@ -11,16 +11,11 @@ if (!SECRET) {
 
 // Generar un token JWT
 export const generateToken = (user) => {
-  try {
-    return jwt.sign(
-      { _id: user._id, email: user.email, role: user.role },
-      SECRET,
-      { expiresIn: EXPIRES_IN }
-    );
-  } catch (error) {
-    console.error('Error al generar el token:', error.message);
-    throw new Error('No se pudo generar el token');
-  }
+  return jwt.sign(
+    { _id: user._id, email: user.email, role: user.role },
+    SECRET,
+    { expiresIn: EXPIRES_IN }
+  );
 };
 
 // Verificar un token JWT
@@ -28,15 +23,13 @@ export const verifyToken = (token) => {
   try {
     return jwt.verify(token, SECRET);
   } catch (error) {
-    if (error.name === 'TokenExpiredError') {
-      console.error('El token ha expirado');
-      throw new Error('El token ha expirado');
-    } else if (error.name === 'JsonWebTokenError') {
-      console.error('El token es inválido');
-      throw new Error('El token es inválido');
-    } else {
-      console.error('Error al verificar el token:', error.message);
-      throw new Error('Error al verificar el token');
-    }
+    const errorMessage =
+      error.name === 'TokenExpiredError'
+        ? 'El token ha expirado'
+        : error.name === 'JsonWebTokenError'
+        ? 'El token es inválido'
+        : 'Error al verificar el token';
+    console.error(errorMessage);
+    throw new Error(errorMessage);
   }
 };

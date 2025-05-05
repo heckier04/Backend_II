@@ -1,11 +1,9 @@
 import dotenv from 'dotenv';
 
-// Cargar las variables de entorno desde el archivo .env
 dotenv.config();
 
 // Validar variables de entorno críticas
-const requiredEnvVars = ['USER_MONGODB', 'PASSWORD', 'DB_NAME', 'JWT_SECRET'];
-requiredEnvVars.forEach((varName) => {
+['USER_MONGODB', 'PASSWORD', 'DB_NAME', 'JWT_SECRET'].forEach((varName) => {
   if (!process.env[varName]) {
     console.error(`❌ Error: Falta la variable de entorno ${varName}`);
     process.exit(1);
@@ -14,11 +12,11 @@ requiredEnvVars.forEach((varName) => {
 
 // Configuración
 export const config = {
-  PORT: process.env.PORT || 8081, // Puerto del servidor
+  PORT: process.env.PORT || 8081,
   db: {
-    connectionString: `mongodb+srv://${process.env.USER_MONGODB}:${process.env.PASSWORD}@callCoder.1tibfdt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`, // Cadena de conexión para MongoDB Atlas
+    connectionString: `mongodb+srv://${process.env.USER_MONGODB}:${process.env.PASSWORD}@callCoder.1tibfdt.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
   },
-  jwtSecret: process.env.JWT_SECRET, // Clave secreta para JWT
+  jwtSecret: process.env.JWT_SECRET,
 };
 
 // Mostrar información de configuración (solo para depuración)

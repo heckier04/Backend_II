@@ -15,6 +15,6 @@ router.use((req, __, next) => {
 router.use('/users', userRouter);
 router.use('/products', productRouter);
 router.use('/carts', cartRouter);
-app.use('/api/tickets', ticketRouter);
+router.use('/tickets', ticketRouter);
 
 export default router;

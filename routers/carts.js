@@ -11,15 +11,15 @@ router.post('/', createCart);
 
 router.get('/:cid', validateCartParams, getCart);
 
-router.post('/:cid/products/:pid',authorizeRole('user'),validateCartParams,validateCartProduct,addProductToCart);
+router.post('/:cid/products/:pid', authorizeRole('user'), validateCartProduct, addProductToCart);
 
-router.delete('/:cid/products/:pid', validateCartParams, removeProductFromCart);
+router.delete('/:cid/products/:pid', removeProductFromCart);
 
-router.put('/:cid/products/:pid', validateCartParams, validateCartProduct, updateProductQuantity);
+router.put('/:cid/products/:pid', validateCartProduct, updateProductQuantity);
 
-router.put('/:cid', validateCartParams, updateCart);
+router.put('/:cid', updateCart);
 
-router.delete('/:cid', validateCartParams, deleteCart);
+router.delete('/:cid', deleteCart);
 
 router.post('/:cid/purchase',passport.authenticate('jwt', { session: false }),validateCartParams,purchaseCart);
 

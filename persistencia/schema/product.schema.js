@@ -14,20 +14,14 @@ export const productSchema = new mongoose.Schema(
         type: String,
         validate: {
           validator: function (v) {
-            return /^(http|https):\/\/[^ "]+$/.test(v); // Validación para URLs
+            return /^(http|https):\/\/[^ "]+$/.test(v); 
           },
           message: 'La URL de la imagen no es válida',
         },
       },
     ],
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+  {timestamps: true,versionKey: false,}
 );
-
-// Puedes agregar un índice único para la propiedad 'code', si es necesario.
-// productSchema.index({ code: 1 }, { unique: true });
 
 export default mongoose.model('Product', productSchema);

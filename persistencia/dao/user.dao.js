@@ -20,24 +20,18 @@ export class UserDAO {
   }
 
   async getUserById(userId) {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new Error('ID de usuario inválido');
-    }
     try {
       return await UserModel.findById(userId).populate('cart');
-    } catch (error) {
-      throw new Error(`Error al obtener usuario por ID: ${error.message}`);
+    } catch {
+      throw new Error('Error al obtener usuario por ID');
     }
   }
 
   async updateUser(userId, updateData) {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      throw new Error('ID de usuario inválido');
-    }
     try {
       return await UserModel.findByIdAndUpdate(userId, updateData, { new: true });
-    } catch (error) {
-      throw new Error(`Error al actualizar usuario: ${error.message}`);
+    } catch {
+      throw new Error('Error al actualizar usuario');
     }
   }
 }

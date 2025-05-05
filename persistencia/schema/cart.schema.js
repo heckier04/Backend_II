@@ -2,12 +2,7 @@ import mongoose from 'mongoose';
 
 export const cartSchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-      unique: true,    
-    },
+    user: {type: mongoose.Schema.Types.ObjectId,ref: 'User',required: true,unique: true,    },
     products: {
       type: [
         {
@@ -18,13 +13,7 @@ export const cartSchema = new mongoose.Schema(
       default: [],
     },
   },
-  {
-    timestamps: true,
-    versionKey: false,
-  }
+  {timestamps: true,versionKey: false,}
 );
-
-// **Elimina esta línea completamente:**
-// cartSchema.index({ user: 1 });
 
 export default mongoose.model('Cart', cartSchema);
